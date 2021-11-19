@@ -1,0 +1,18 @@
+﻿@{
+    ViewData["Title"] = "Home";
+}
+
+<partial name="_Rating" model='@new RatingModel("Simple","Complicated","simplicity")' />
+<partial name="_Rating" model='@new RatingModel("Cheap","Expensive","price")' />
+<partial name="_Rating" model='@new RatingModel("Fast","Slow","time")' />
+<partial name="_Rating" model='@new RatingModel("Bland","Tasty","taste")' />
+
+@section Scripts{
+<script type="text/javascript">
+    $(function() {
+       $('.rating-component').barrating({
+           theme: 'bars-movie'
+       });
+    });
+</script>
+}
