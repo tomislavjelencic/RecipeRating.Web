@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RecipeRating.DAL;
 
 namespace RecipeRating.DAL.Migrations
 {
     [DbContext(typeof(RecipeRatingDbContext))]
-    partial class RecipeRatingDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211119120749_AddedProviderAccountAndFixes")]
+    partial class AddedProviderAccountAndFixes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

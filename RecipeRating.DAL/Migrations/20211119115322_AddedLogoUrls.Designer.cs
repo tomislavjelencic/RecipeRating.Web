@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RecipeRating.DAL;
 
 namespace RecipeRating.DAL.Migrations
 {
     [DbContext(typeof(RecipeRatingDbContext))]
-    partial class RecipeRatingDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211119115322_AddedLogoUrls")]
+    partial class AddedLogoUrls
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -234,9 +236,8 @@ namespace RecipeRating.DAL.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("ImageUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("ImageUrl")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -257,9 +258,8 @@ namespace RecipeRating.DAL.Migrations
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
-                    b.Property<string>("ImageUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("ImageUrl")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -289,32 +289,6 @@ namespace RecipeRating.DAL.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Providers");
-                });
-
-            modelBuilder.Entity("RecipeRating.Model.ProviderAccount", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("AccountId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ImageUrl")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ProviderId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProviderId");
-
-                    b.ToTable("ProviderAccount");
                 });
 
             modelBuilder.Entity("RecipeRating.Model.Rating", b =>
@@ -355,8 +329,14 @@ namespace RecipeRating.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ProviderAccountId")
+                    b.Property<int>("ProviderId")
                         .HasColumnType("int");
+
+                    b.Property<string>("ProviderUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProviderUserName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Url")
                         .IsRequired()
@@ -370,7 +350,7 @@ namespace RecipeRating.DAL.Migrations
 
                     b.HasIndex("DishId");
 
-                    b.HasIndex("ProviderAccountId");
+                    b.HasIndex("ProviderId");
 
                     b.HasIndex("UserId");
 
@@ -459,15 +439,6 @@ namespace RecipeRating.DAL.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("RecipeRating.Model.ProviderAccount", b =>
-                {
-                    b.HasOne("RecipeRating.Model.Provider", "Provider")
-                        .WithMany("ProviderAccounts")
-                        .HasForeignKey("ProviderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("RecipeRating.Model.Recipe", b =>
                 {
                     b.HasOne("RecipeRating.Model.Dish", "Dish")
@@ -476,9 +447,9 @@ namespace RecipeRating.DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("RecipeRating.Model.ProviderAccount", "ProviderAccount")
+                    b.HasOne("RecipeRating.Model.Provider", "Provider")
                         .WithMany("Recipes")
-                        .HasForeignKey("ProviderAccountId")
+                        .HasForeignKey("ProviderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

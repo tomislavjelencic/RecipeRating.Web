@@ -12,6 +12,6 @@ namespace RecipeRating.Model
         [Required]
         public string Name { get; set; }
         public string LogoUrl { get; set; }
-        public virtual ICollection<Recipe> Recipes { get; set; }
+        public virtual ICollection<ProviderAccount> ProviderAccounts { get; set; }
     }
 }

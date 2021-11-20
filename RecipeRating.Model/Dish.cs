@@ -12,6 +12,8 @@ namespace RecipeRating.Model
         [Required]
         public string Name { get; set; }
         [Required]
+        public string ImageUrl { get; set; }
+        [Required]
         public int CategoryId { get; set; }
         public Category Category { get; set; }
         public virtual ICollection<Recipe> Recipes { get; set; }

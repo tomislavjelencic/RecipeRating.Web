@@ -16,13 +16,11 @@ namespace RecipeRating.Model
         public int DishId { get; set; }
         public Dish Dish { get; set; }
         [Required]
-        public int ProviderId { get; set; }
-        public Provider Provider { get; set; }
+        public int ProviderAccountId { get; set; }
+        public ProviderAccount ProviderAccount { get; set; }
         [Required]
         public string UserId { get; set; }
         public AppUser User { get; set; }
-        public string ProviderUserId { get; set; }
-        public string ProviderUserName { get; set; }
         public virtual ICollection<RecipeRating> RecipeRatings { get; set; }
     }
 }
