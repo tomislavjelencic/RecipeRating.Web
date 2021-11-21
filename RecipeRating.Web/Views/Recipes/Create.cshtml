@@ -1,0 +1,157 @@
+﻿@using static RecipeRating.Web.Models.YtSearchResponseModels
+@model RecipeRating.Web.Models.RecipeInputModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+<style>
+    .table-wrapper {
+    max-height: 500px;
+    overflow: auto;
+    display: inline-block;
+}
+</style>
+<h1>Create</h1>
+
+<h4>Recipe</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label id="category-label" class="control-label">Category</label>
+                <select id="category" class="selectpicker form-control" data-live-search="true" asp-items="ViewBag.CategoryId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="DishId" class="control-label">Dish</label>
+                <select asp-for="DishId" id="dish-select" class="selectpicker form-control" data-live-search="true"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input id="name" asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ThumbnailUrl" class="control-label">Thumbnail</label>
+                <input id="thumbnail" asp-for="ThumbnailUrl" class="form-control" />
+                <span asp-validation-for="ThumbnailUrl" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Url" class="control-label">YouTube Video Id</label>
+                <input id="video-id" asp-for="Url" class="form-control" />
+                <span asp-validation-for="Url" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input id="provider-account-id" asp-for="ProviderAccountId" class="form-control" type="hidden">
+            </div>
+            <div class="form-group">
+                <input id="account-id" asp-for="AccountId" class="form-control" type="hidden">
+            </div>
+            <div class="form-group">
+                <label asp-for="AccountName" class="control-label">Channel name</label>
+                <input id="account-name" asp-for="AccountName" class="form-control" type="text" readonly>
+            </div>
+            <div class="form-group">
+                <input asp-for="AccountImageUrl" class="form-control" type="hidden">
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+    <div class="col-md-8">
+        @*<div class="col-md-7">
+            <input id="search-input" type="text" class="m-2 form-control" name="Search" />
+        </div>
+        <div class="col-md-2">
+            <input id="search" value="Search" class="btn btn-success" />
+        </div>*@
+
+        <div class="input-group mb-3">
+            <input id="search-input" type="text" class="form-control" placeholder="Search" aria-label="Search" aria-describedby="basic-addon2">
+            <div class="input-group-append">
+                <button id="search" class="btn btn-outline-light" type="button">Search</button>
+            </div>
+        </div>
+        <partial name="_SearchTable" />
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+<script type="text/javascript">
+        $(document).ready(function () {
+         populateDropdown();
+    });
+
+    $('#category').change('input',function(e){
+            populateDropdown();
+    });
+
+    function populateDropdown() {
+        var categoryId = $("#category").val();
+        if(categoryId != null){
+            $.ajax({
+            type: "GET",
+            url: "/api/Dishes?categoryId=" + categoryId,
+            data: "",
+            success: function (data) {
+                var s = "";
+                for (var i = 0; i < data.length; i++) {
+                    s += '<option value="' + data[i].id + '">' + data[i].name + '</option>';
+                }
+                $("#dish-select").html(s);
+                $('#dish-select').selectpicker('refresh');
+            }
+        });
+        }
+     };
+
+     $("#search").on("click", function (e) {
+             let input = $('#search-input');
+             let val = input.val();
+
+                 $.ajax({
+                     url: "/recipes/CreateAjax?keyword=" + val,
+                     method: "GET",
+                     data: "",
+                     success: function (result) {
+                        var items = result.items;
+                        for (var i = 0; i < items.length; i++) {
+                            $("#search-table-tb").append($('<tr>')
+                            .append('<td><a href=https://www.youtube.com/watch?v='+ items[i].id.videoId +'>' + items[i].snippet.title +'</a></td>')
+                            .append('<td><img src="' + items[i].snippet.thumbnails.medium.url +  '" alt="Image" width="100"></td>')
+                            .append('<td>' + items[i].snippet.channelTitle +  '</td>')
+                            .append('<td><input id="' + items[i].id.videoId + '" data="' + items[i].id.videoId +'" type="submit" value="Input Video Data" class="btn btn-light add-video"/></td>'));
+                            }
+                     }
+                 });
+         });
+
+          $(document).on('click', '.add-video', function() {
+             let val = $(this).attr( "data" )
+
+                 $.ajax({
+                     url: "/recipes/GetVideoAjax?id=" + val,
+                     method: "GET",
+                     data: "",
+                     success: function (result) {
+                         $('#name').val(result.name);
+                         $('#thumbnail').val(result.thumbnailUrl);
+                         $('#video-id').val(result.url);
+                         $('#account-name').val(result.accountName);
+                         $('#account-id').val(result.accountId);
+                         $('#provider-account-id').val(result.providerAccountId);
+                     }
+                 });
+         });
+
+</script>
+    @{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+}
+}

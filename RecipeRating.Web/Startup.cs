@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using RecipeRating.DAL;
 using RecipeRating.Model;
+using RecipeRating.Web.Services;
 
 namespace RecipeRating.Web
 {
@@ -70,6 +71,8 @@ namespace RecipeRating.Web
             services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<RecipeRatingDbContext>();
+
+            services.AddScoped<IYtHttpService, YtHttpService>();
 
             services.AddControllersWithViews();
         }

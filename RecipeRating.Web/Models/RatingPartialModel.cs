@@ -1,8 +1,8 @@
 ﻿namespace RecipeRating.Web.Models
 {
-    public class RatingModel
+    public class RatingPartialModel
     {
-        public RatingModel(string minLabel, string maxLabel, string name)
+        public RatingPartialModel(string minLabel, string maxLabel, string name)
         {
             MinLabel = minLabel;
             MaxLabel = maxLabel;

@@ -11,6 +11,8 @@ namespace RecipeRating.Model
         [Required]
         public string Name { get; set; }
         [Required]
+        public string ThumbnailUrl { get; set; }
+        [Required]
         public string Url { get; set; }
         [Required]
         public int DishId { get; set; }

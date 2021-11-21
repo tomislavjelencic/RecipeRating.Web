@@ -19,8 +19,9 @@
             </div>
             <div class="form-group">
                 <label asp-for="ImageUrl" class="control-label"></label>
-                <input asp-for="ImageUrl" class="form-control" />
+                <input asp-for="ImageUrl" class="form-control" id="image-url" />
                 <span asp-validation-for="ImageUrl" class="text-danger"></span>
+                <img src="https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty.jpg" class="img-thumbnail mt-2" id="category-image">
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
@@ -34,5 +35,12 @@
 </div>
 
 @section Scripts {
+    <script type="text/javascript">
+       $('#image-url').on('input',function(e){
+           var imageUrl = $("#image-url").val();
+           $('#category-image').attr('src', imageUrl);
+       });
+    
+    </script>
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

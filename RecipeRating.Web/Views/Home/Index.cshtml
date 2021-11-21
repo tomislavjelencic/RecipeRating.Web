@@ -2,10 +2,10 @@
     ViewData["Title"] = "Home";
 }
 
-<partial name="_Rating" model='@new RatingModel("Simple","Complicated","simplicity")' />
-<partial name="_Rating" model='@new RatingModel("Cheap","Expensive","price")' />
-<partial name="_Rating" model='@new RatingModel("Fast","Slow","time")' />
-<partial name="_Rating" model='@new RatingModel("Bland","Tasty","taste")' />
+<partial name="_Rating" model='@new RatingPartialModel("Simple","Complicated","Simplicity")' />
+<partial name="_Rating" model='@new RatingPartialModel("Cheap","Expensive","Price")' />
+<partial name="_Rating" model='@new RatingPartialModel("Quick","Slow","Time")' />
+<partial name="_Rating" model='@new RatingPartialModel("Bland","Tasty","Taste")' />
 
 @section Scripts{
 <script type="text/javascript">

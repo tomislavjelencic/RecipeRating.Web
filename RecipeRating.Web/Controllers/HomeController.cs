@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 using RecipeRating.Web.Models;
 using Microsoft.AspNetCore.Identity;
 using RecipeRating.Model;
-using Google.Apis.Auth.OAuth2;
+using System.Security.Claims;
 
 namespace RecipeRating.Web.Controllers
 {
@@ -28,23 +28,6 @@ namespace RecipeRating.Web.Controllers
             var info = await _signInManager.GetExternalLoginInfoAsync();
             if (info != null)
                 await _signInManager.UpdateExternalAuthenticationTokensAsync(info);
-            var info2 = await _signInManager.GetExternalLoginInfoAsync();
-
-            /*UserCredential credential;
-            credential.Token = new Google.Apis.Auth.OAuth2.Responses.TokenResponse { }
-
-            var youtubeService = new YouTubeService(new BaseClientService.Initializer()
-            {
-                HttpClientInitializer = credential,
-                ApplicationName = this.GetType().ToString()
-            });
-
-            var channelsListRequest = youtubeService.Channels.List("contentDetails");
-            channelsListRequest.Mine = true;
-
-            // Retrieve the contentDetails part of the channel resource for the authenticated user's channel.
-            var channelsListResponse = await channelsListRequest.ExecuteAsync();*/
-
 
             return View();
         }

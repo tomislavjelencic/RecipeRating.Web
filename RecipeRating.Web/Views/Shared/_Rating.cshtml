@@ -1,11 +1,11 @@
-﻿@model RatingModel
+﻿@model RatingPartialModel
 
 <div class="row">
     <div class="col-3">
         @Model.MinLabel
     </div>
     <div class="col-6">
-        <select id="@Model.Name" class="rating-component">
+        <select id="@Model.Name" asp-for="@Model.Name" class="rating-component">
             <option value="1"></option>
             <option value="2"></option>
             <option value="3"></option>
