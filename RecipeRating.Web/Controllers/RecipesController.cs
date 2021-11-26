@@ -31,7 +31,7 @@ namespace RecipeRating.Web.Controllers
         // GET: Recipes
         public async Task<IActionResult> Index()
         {
-            var recipeRatingDbContext = _context.Recipes.Include(r => r.Dish).Include(r => r.ProviderAccount).Include(r => r.User);
+            var recipeRatingDbContext = _context.Recipes.Include(r => r.Dish).Include(r => r.ProviderAccount).Include(r => r.Ratings).Include(r => r.User);
             return View(await recipeRatingDbContext.ToListAsync());
         }
 

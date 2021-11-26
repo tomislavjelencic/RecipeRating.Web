@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 namespace RecipeRating.Model
 {
@@ -24,5 +25,9 @@ namespace RecipeRating.Model
         public string UserId { get; set; }
         public AppUser User { get; set; }
         public virtual ICollection<Rating> Ratings { get; set; }
+        public int? Complexity => Ratings.Count > 0 ? (int?)Math.Ceiling(Ratings.Select(r => r.Simplicity).Average()) : null;
+        public int? Taste => Ratings.Count > 0 ? (int?)Math.Ceiling(Ratings.Select(r => r.Taste).Average()) : null;
+        public int? Time => Ratings.Count > 0 ? (int?)Math.Ceiling(Ratings.Select(r => r.Time).Average()) : null;
+        public int? Price => Ratings.Count > 0 ? (int?)Math.Ceiling(Ratings.Select(r => r.Price).Average()) : null;
     }
 }
