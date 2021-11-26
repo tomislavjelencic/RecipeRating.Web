@@ -1,18 +1,54 @@
 ﻿@{
     ViewData["Title"] = "Home";
 }
-
-<partial name="_Rating" model='@new RatingPartialModel("Simple","Complicated","Simplicity")' />
-<partial name="_Rating" model='@new RatingPartialModel("Cheap","Expensive","Price")' />
-<partial name="_Rating" model='@new RatingPartialModel("Quick","Slow","Time")' />
-<partial name="_Rating" model='@new RatingPartialModel("Bland","Tasty","Taste")' />
-
-@section Scripts{
-<script type="text/javascript">
-    $(function() {
-       $('.rating-component').barrating({
-           theme: 'bars-movie'
-       });
-    });
-</script>
+<style>
+    html{
+	height: 100%;
 }
+body{
+	background-image: url(https://media.istockphoto.com/photos/culinary-background-with-traditional-ingredients-of-italian-cuisine-picture-id1278745986?b=1&k=20&m=1278745986&s=170667a&w=0&h=O7DjUu6D-mBNvwS68Ou_BmNF22a5XwrQgk2j9uV2Hs4=);
+	background-size:cover;
+	background-position: center;
+	color:darkgrey;
+}
+h1{
+	font-size: 5em;
+	font-weight: bold;
+	text-shadow: 0px 4px 3px rgba(0,0,0,0.4);
+	text-shadow: 0px 8px 13px rgba(0,0,0,0.1);
+	text-shadow: 0px 18px 23px rgba(0,0,0,0.1);
+}
+h3{
+	font-size:17px;
+	text-shadow: 0px 4px 3px rgba(0,0,0,0.4);
+	text-shadow: 0px 8px 13px rgba(0,0,0,0.1);
+	text-shadow: 0px 18px 23px rgba(0,0,0,0.1);
+
+}
+#content{
+	text-align:left;
+	padding-top: 15%;
+
+}
+hr{
+/* a horizontal rule can really help organize and 'clean up' landing pages... */
+	visibility:hidden;
+	width: 400px;
+	border-top: 1px solid #f8f8f8;
+	border-bottom: 1px solid rgba(0,0,0,0.2);
+}
+
+</style>
+
+<div class="container">
+	<div class="row">
+		<div class="col-lg-12">
+			<div id="content">
+				<h1>You Taste</h1>
+				<h3>Watch, try, taste, rate!<br /><br /> Rate YouTube recipes.<br /> Find the recipe you are looking for.<br />Browse by categories, dishes and your YouTube subscriptions.</h3>
+				<hr />
+				<button class="btn btn-light">Login now</button>
+			</div>
+		</div>
+	</div>
+</div>

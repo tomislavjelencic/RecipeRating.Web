@@ -47,6 +47,7 @@ namespace RecipeRating.Web.Controllers
                 .Include(r => r.Dish)
                 .Include(r => r.ProviderAccount)
                 .Include(r => r.User)
+                .Include(r => r.Ratings).ThenInclude(r => r.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (recipe == null)
             {
@@ -228,6 +229,17 @@ namespace RecipeRating.Web.Controllers
             _context.Recipes.Remove(recipe);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Rate(int? recipeId, Rating rating)
+        {
+            rating.RecipeId = recipeId.Value;
+            rating.UserId = _userManager.GetUserId(User);
+            _context.Ratings.Add(rating);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Details), recipeId);
         }
 
         private bool RecipeExists(int id)

@@ -4,48 +4,88 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<div class="row mb-3">
+    <div class="col-12">
+        <h3>@Model.Dish.Name Recipe</h3>
+    </div>
+    <div class="embed-responsive embed-responsive-16by9 m-3">
+        <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/@Model.Url"
+                title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+        </iframe>
+    </div>
+    <div class="col-12">
+        <h4>@Model.Name</h4>
+    </div>
+    <div class="col-6">
+        Channel: <a href="https://www.youtube.com/channel/@Model.ProviderAccount.AccountId" target="_blank">@Model.ProviderAccount.Name</a>
+    </div>
+    <div class="col-6 text-right">
+        Added by user: <a href="#" target="_blank">@Model.User.FullName</a>
+    </div>
+</div>
+<form asp-action="Rate" asp-route-recipeId="@Model.Id">
+    <div class="row">
+        <div class="col-12 mb-3">
+            <h5>Rate and leave a comment:</h5>
+        </div>
+        <div class="col-lg-6 col-md-12">
+            <partial name="_Rating" model='@new RatingPartialModel("Simple","Complex","Simplicity")' />
+            <partial name="_Rating" model='@new RatingPartialModel("Cheap","Expensive","Price")' />
+            <partial name="_Rating" model='@new RatingPartialModel("Quick","Time consuming","Time")' />
+            <partial name="_Rating" model='@new RatingPartialModel("Bland","Tasty","Taste")' />
+        </div>
+        <div class="col-lg-6 col-md-12">
+            <textarea name="Comment" class="col-12 float-right" rows="5" placeholder="Leave a comment"></textarea>
+        </div>
+        <div class="col-12">
+            <input class="btn btn-outline-light float-right" type="submit" value="Send">
+        </div>
+    </div>
+</form>
+<div class="row mt-3">
+    <div class="col-12">
+        <h5>Ratings and comments:</h5>
+        @foreach (var rating in Model.Ratings)
+        {
+            <div class="container">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <img src="https://image.ibb.co/jw55Ex/def_face.jpg" class="img img-rounded img-fluid" />
+                                @*<p class="text-secondary text-center">15 Minutes Ago</p>*@
+                            </div>
+                            <div class="col-md-10">
+                                <p>
+                                    <strong>@rating.User.FullName</strong>
+                                    <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                                    <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                                    <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                                    <span class="float-right"><i class="text-warning fa fa-star"></i></span>
 
-<div>
-    <h4>Recipe</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Url)
-        </dt>
-        <dd class="col-sm-10">
-            <iframe width="560" height="315" src="https://www.youtube.com/embed/@Model.Url"
-            title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
-            </iframe>
-            @*@Html.DisplayFor(model => model.Url)*@
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Dish)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Dish.ImageUrl)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ProviderAccount)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ProviderAccount.Id)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.User)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.User.Id)
-        </dd>
-    </dl>
+                                </p>
+                                <div class="clearfix"></div>
+                                <p>@rating.Comment</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
+
+@section Scripts{
+<script type="text/javascript">
+    $(function() {
+       $('.rating-component').barrating({
+           theme: 'bars-movie'
+       });
+    });
+</script>
+}

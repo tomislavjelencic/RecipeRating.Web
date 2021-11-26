@@ -25,7 +25,6 @@ namespace RecipeRating.DAL
             public DbSet<ProviderAccount> ProviderAccounts { get; set; }
             public DbSet<Rating> Ratings { get; set; }
             public DbSet<Recipe> Recipes { get; set; }
-            public DbSet<Model.RecipeRating> RecipeRatings { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

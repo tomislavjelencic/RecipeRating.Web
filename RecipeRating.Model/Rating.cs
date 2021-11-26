@@ -17,6 +17,10 @@ namespace RecipeRating.Model
         public int Time { get; set; }
         [Required]
         public int Taste { get; set; }
-        public virtual ICollection<RecipeRating> RecipeRatings { get; set; }
+        public string Comment { get; set; }
+        public string UserId { get; set; }
+        public AppUser User { get; set; }
+        public int RecipeId { get; set; }
+        public Recipe Recipe { get; set; }
     }
 }

@@ -1,11 +1,11 @@
 ﻿@model RatingPartialModel
 
-<div class="row">
-    <div class="col-3">
+<div class="row mb-3">
+    <div class="col-2">
         @Model.MinLabel
     </div>
-    <div class="col-6">
-        <select id="@Model.Name" asp-for="@Model.Name" class="rating-component">
+    <div class="col-8">
+        <select id="@Model.Name" name="@Model.Name" class="rating-component">
             <option value="1"></option>
             <option value="2"></option>
             <option value="3"></option>
@@ -13,7 +13,96 @@
             <option value="5"></option>
         </select>
     </div>
-    <div class="col-3">
+    <div class="col-2">
         @Model.MaxLabel
     </div>
 </div>
+
+
+@*<form asp-action="Rate" asp-route-id="@Model.Id">
+    <div class="row">
+        <div class="col-12 mb-3">
+            <h5>Rate and leave a comment:</h5>
+        </div>
+        <div class="col-lg-6 col-md-12">
+            <div class="row mb-3">
+                <div class="col-2">
+                    @Model.MinLabel
+                </div>
+                <div class="col-8">
+                    <select id="@Model.Name" class="rating-component">
+                        <option value="1"></option>
+                        <option value="2"></option>
+                        <option value="3"></option>
+                        <option value="4"></option>
+                        <option value="5"></option>
+                    </select>
+                </div>
+                <div class="col-2">
+                    @Model.MaxLabel
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-2">
+                    @Model.MinLabel
+                </div>
+                <div class="col-8">
+                    <select id="@Model.Name" class="rating-component">
+                        <option value="1"></option>
+                        <option value="2"></option>
+                        <option value="3"></option>
+                        <option value="4"></option>
+                        <option value="5"></option>
+                    </select>
+                </div>
+                <div class="col-2">
+                    @Model.MaxLabel
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-2">
+                    @Model.MinLabel
+                </div>
+                <div class="col-8">
+                    <select id="@Model.Name" class="rating-component">
+                        <option value="1"></option>
+                        <option value="2"></option>
+                        <option value="3"></option>
+                        <option value="4"></option>
+                        <option value="5"></option>
+                    </select>
+                </div>
+                <div class="col-2">
+                    @Model.MaxLabel
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-2">
+                    @Model.MinLabel
+                </div>
+                <div class="col-8">
+                    <select id="@Model.Name" class="rating-component">
+                        <option value="1"></option>
+                        <option value="2"></option>
+                        <option value="3"></option>
+                        <option value="4"></option>
+                        <option value="5"></option>
+                    </select>
+                </div>
+                <div class="col-2">
+                    @Model.MaxLabel
+                </div>
+            </div>
+            <partial name="_Rating" model='@new RatingPartialModel("Simple","Complex","Simplicity")' />
+            <partial name="_Rating" model='@new RatingPartialModel("Cheap","Expensive","Price")' />
+            <partial name="_Rating" model='@new RatingPartialModel("Quick","Time consuming","Time")' />
+            <partial name="_Rating" model='@new RatingPartialModel("Bland","Tasty","Taste")' />
+        </div>
+        <div class="col-lg-6 col-md-12">
+            <textarea name="Comment" class="col-12 float-right" rows="5" placeholder="Leave a comment"></textarea>
+        </div>
+        <div class="col-12">
+            <input class="btn btn-outline-light float-right" type="submit" value="Send">
+        </div>
+    </div>
+</form>*@

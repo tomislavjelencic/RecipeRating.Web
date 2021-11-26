@@ -23,6 +23,6 @@ namespace RecipeRating.Model
         [Required]
         public string UserId { get; set; }
         public AppUser User { get; set; }
-        public virtual ICollection<RecipeRating> RecipeRatings { get; set; }
+        public virtual ICollection<Rating> Ratings { get; set; }
     }
 }

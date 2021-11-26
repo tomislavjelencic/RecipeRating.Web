@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RecipeRating.DAL;
 
 namespace RecipeRating.DAL.Migrations
 {
     [DbContext(typeof(RecipeRatingDbContext))]
-    partial class RecipeRatingDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211126091617_AddedCommentToRating")]
+    partial class AddedCommentToRating
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -330,9 +332,6 @@ namespace RecipeRating.DAL.Migrations
                     b.Property<int>("Price")
                         .HasColumnType("int");
 
-                    b.Property<int>("RecipeId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Simplicity")
                         .HasColumnType("int");
 
@@ -342,14 +341,7 @@ namespace RecipeRating.DAL.Migrations
                     b.Property<int>("Time")
                         .HasColumnType("int");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("RecipeId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Ratings");
                 });
@@ -392,6 +384,28 @@ namespace RecipeRating.DAL.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Recipes");
+                });
+
+            modelBuilder.Entity("RecipeRating.Model.RecipeRating", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("RatingId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RecipeId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RatingId");
+
+                    b.HasIndex("RecipeId");
+
+                    b.ToTable("RecipeRatings");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -463,19 +477,6 @@ namespace RecipeRating.DAL.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("RecipeRating.Model.Rating", b =>
-                {
-                    b.HasOne("RecipeRating.Model.Recipe", "Recipe")
-                        .WithMany("Ratings")
-                        .HasForeignKey("RecipeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("RecipeRating.Model.AppUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-                });
-
             modelBuilder.Entity("RecipeRating.Model.Recipe", b =>
                 {
                     b.HasOne("RecipeRating.Model.Dish", "Dish")
@@ -493,6 +494,21 @@ namespace RecipeRating.DAL.Migrations
                     b.HasOne("RecipeRating.Model.AppUser", "User")
                         .WithMany("Recipes")
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("RecipeRating.Model.RecipeRating", b =>
+                {
+                    b.HasOne("RecipeRating.Model.Rating", "Rating")
+                        .WithMany("RecipeRatings")
+                        .HasForeignKey("RatingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("RecipeRating.Model.Recipe", "Recipe")
+                        .WithMany("RecipeRatings")
+                        .HasForeignKey("RecipeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
