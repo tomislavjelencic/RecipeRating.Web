@@ -235,6 +235,7 @@ namespace RecipeRating.Web.Controllers
         public async Task<IActionResult> Rate(int? recipeId, Rating rating)
         {
             rating.RecipeId = recipeId.Value;
+            rating.CreatedAt = DateTime.Now;
             rating.UserId = _userManager.GetUserId(User);
             _context.Ratings.Add(rating);
             await _context.SaveChangesAsync();

@@ -1,4 +1,5 @@
-﻿@model RecipeRating.Model.Recipe
+﻿@using System.Globalization
+@model RecipeRating.Model.Recipe
 
 @{
     ViewData["Title"] = "Details";
@@ -47,35 +48,34 @@
         <div class="col-12 mb-3">
             <h5>Ratings and comments:</h5>
         </div>
-        @foreach (var rating in Model.Ratings)
-        {
-            <div class="container">
-                <div class="card">
+        <div class="container">
+            @foreach (var rating in Model.Ratings)
+            {
+                <div class="card mb-3">
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-1 align-items-center">
                                 <img src="https://image.ibb.co/jw55Ex/def_face.jpg" width="50" class="img-fluid rounded-circle" />
-                                @*<p class="text-secondary text-center">15 Minutes Ago</p>*@
                             </div>
                             <div class="col-md-11">
                                 <p>
-                                    <strong>@rating.User.FullName</strong>
+                                    <strong>@rating.User.FullName</strong> on @rating.CreatedAt.ToString("F", CultureInfo.CreateSpecificCulture("en-US"))
                                 </p>
                                 <div class="clearfix"></div>
                                 <p>@rating.Comment</p>
-                                    <div class="col-md-12">
-                                        <partial name="_RatingReadonly" model='@new RatingReadonlyPartialModel("Complex", "complex.svg", @rating.Simplicity)' />
-                                        <partial name="_RatingReadonly" model='@new RatingReadonlyPartialModel("Time intensive", "time.svg", @rating.Time)' />
-                                        <partial name="_RatingReadonly" model='@new RatingReadonlyPartialModel("Expensive", "price.svg", @rating.Price)' />
-                                        <partial name="_RatingReadonly" model='@new RatingReadonlyPartialModel("Tasty", "tasty.svg", @rating.Taste)' />
-                                    </div>
+                                <div class="col-md-12">
+                                    <partial name="_RatingReadonly" model='@new RatingReadonlyPartialModel("Complex", "complex.svg", @rating.Simplicity)' />
+                                    <partial name="_RatingReadonly" model='@new RatingReadonlyPartialModel("Time intensive", "time.svg", @rating.Time)' />
+                                    <partial name="_RatingReadonly" model='@new RatingReadonlyPartialModel("Expensive", "price.svg", @rating.Price)' />
+                                    <partial name="_RatingReadonly" model='@new RatingReadonlyPartialModel("Tasty", "tasty.svg", @rating.Taste)' />
+                                </div>
                             </div>
                         </div>
 
                     </div>
                 </div>
-            </div>
-        }
+            }
+        </div>
     </div>
 </div>
 <div>
@@ -98,7 +98,7 @@
     $(function() {
        $('.readonly').barrating({
            theme: 'bars-movie',
-           readonly: true           
+           readonly: true
        });
     });
 </script>
