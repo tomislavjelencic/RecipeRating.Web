@@ -1,4 +1,10 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@using RecipeRating.Model
+
+@inject SignInManager<AppUser> SignInManager
+@inject UserManager<AppUser> UserManager
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -30,9 +36,18 @@
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Recipes" asp-action="Index">Recipes</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Recipes" asp-action="Subscriptions">My subscriptions</a>
-                        </li>
+                        @if (SignInManager.GetExternalLoginInfoAsync().Result != null)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Recipes" asp-action="Subscriptions">My subscriptions</a>
+                            </li>
+                        }
+                        @if (ViewContext.HttpContext.User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-danger" asp-area="" asp-controller="Users" asp-action="Index">Manage users</a>
+                            </li>
+                        }
                     </ul>
                 </div>
                 <partial name="_LoginPartial" />

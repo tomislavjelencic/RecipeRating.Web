@@ -17,7 +17,6 @@
                 <select asp-for="CategoryId" class="selectpicker form-control" data-live-search="true">
                     @foreach (var item in ViewBag.CategoryId)
                     {
-
                         <option value="@item.Value">@item.Text</option>
                     }
                 </select>
