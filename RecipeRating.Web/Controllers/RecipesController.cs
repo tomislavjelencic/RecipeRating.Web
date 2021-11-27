@@ -114,8 +114,8 @@ namespace RecipeRating.Web.Controllers
         public async Task<ActionResult> CreateAjax(string keyword)
         {
             var info = await _signInManager.GetExternalLoginInfoAsync();
-            var token = info.AuthenticationTokens.Where(a => a.Name == "access_token").First().Value;
-            var model = _ytService.GetSearchResults(keyword, token);
+            //var token = info.AuthenticationTokens.Where(a => a.Name == "access_token").First().Value;
+            var model = _ytService.GetSearchResults(keyword);
             return Ok(model);
         }
 
@@ -123,8 +123,8 @@ namespace RecipeRating.Web.Controllers
         public async Task<ActionResult> GetVideoAjax(string id)
         {
             var info = await _signInManager.GetExternalLoginInfoAsync();
-            var token = info.AuthenticationTokens.Where(a => a.Name == "access_token").First().Value;
-            var model = _ytService.GetVideo(id, token);
+            //var token = info.AuthenticationTokens.Where(a => a.Name == "access_token").First().Value;
+            var model = _ytService.GetVideo(id);
             
             var dto = new VideoAutocompleteModel
             {
@@ -240,7 +240,7 @@ namespace RecipeRating.Web.Controllers
             _context.Ratings.Add(rating);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction(nameof(Details), recipeId);
+            return RedirectToAction(nameof(Details), new { id = recipeId});
         }
 
         private bool RecipeExists(int id)

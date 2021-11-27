@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RecipeRating.DAL;
 using RecipeRating.Model;
+using RecipeRating.Web.Helpers;
+using RecipeRating.Web.Models;
 
 namespace RecipeRating.Web.Controllers
 {
@@ -20,10 +22,38 @@ namespace RecipeRating.Web.Controllers
         }
 
         // GET: Dishes
-        public async Task<IActionResult> Index()
-        {
-            var recipeRatingDbContext = _context.Dishes.Include(d => d.Category);
-            return View(await recipeRatingDbContext.ToListAsync());
+        public async Task<IActionResult> Index(DishesFilterModel filter)
+        {          
+            if (filter.searchString != null || filter.categoryFilter != null)
+            {
+                filter.pageNumber = 1;
+            }
+            else
+            {
+                filter.searchString = filter.currentFilter;
+            }
+
+            ViewData["CurrentFilter"] = filter.searchString;
+            ViewData["CurrentCategoryFilter"] = filter.categoryFilter;
+
+            var dishes = from s in _context.Dishes
+                             select s;
+            if (!String.IsNullOrEmpty(filter.searchString))
+            {
+                dishes = dishes.Include(d =>d.Category).Where(s => s.Name.Contains(filter.searchString));
+            }
+            if (filter.categoryFilter != null)
+            {
+                dishes = dishes.Include(d => d.Category).Where(s => s.CategoryId == filter.categoryFilter.Value);
+            }
+
+            int pageSize = 10;
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", filter.categoryFilter);
+            //ViewBag.CurrentFilter = filter.searchString;
+            return View(await PaginatedList<Dish>.CreateAsync(dishes.AsNoTracking(), filter.pageNumber ?? 1, pageSize));
+
+            /*var recipeRatingDbContext = _context.Dishes.Include(d => d.Category);
+            return View(await recipeRatingDbContext.ToListAsync());*/
         }
 
         // GET: Dishes/Details/5
