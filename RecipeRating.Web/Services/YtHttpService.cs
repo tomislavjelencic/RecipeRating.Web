@@ -54,7 +54,7 @@ namespace RecipeRating.Web.Services
             var client = new RestClient(_config["Authentication:Google:YtEndpoint"]);
             var request = new RestRequest("/channels", Method.GET);
 
-            request.AddQueryParameter("part", "snippet");
+            request.AddQueryParameter("part", "id");
             request.AddQueryParameter("mine", "true");
             request.AddQueryParameter("key", _config["Authentication:Google:ApiKey"]);
             request.AddHeader("Authorization", $"Bearer {token}");
@@ -71,16 +71,23 @@ namespace RecipeRating.Web.Services
 
             request.AddQueryParameter("part", "snippet");
             request.AddQueryParameter("channelId", id);
+            request.AddQueryParameter("maxResults", "50");
             request.AddQueryParameter("key", _config["Authentication:Google:ApiKey"]);
             request.AddHeader("Authorization", $"Bearer {token}");
             request.AddHeader("Accept", "application/json");
-            var response = client.Execute(request);
-            var data = JsonConvert.DeserializeObject<YtSubscriptionsResponse>(response.Content);
             List<string> subs = new List<string>();
-            foreach(var item in data.items)
+            string nextPageToken = null;
+            do
             {
-                subs.Add(item.id);
-            }
+                request.AddQueryParameter("pageToken", nextPageToken);
+                var response = client.Execute(request);
+                var data = JsonConvert.DeserializeObject<YtSubscriptionsResponse>(response.Content);
+                foreach (var item in data.items)
+                {
+                    subs.Add(item.snippet.resourceId.channelId.ToLower());
+                }
+                nextPageToken = data.nextPageToken;
+            } while(nextPageToken != null);
             return subs;
         }
     }

@@ -35,6 +35,22 @@ namespace RecipeRating.Web.Controllers
             return View(await recipeRatingDbContext.ToListAsync());
         }
 
+        // GET: Recipes/Subscriptions
+        public async Task<IActionResult> Subscriptions()
+        {
+            var info = await _signInManager.GetExternalLoginInfoAsync();
+            if(info == null)
+            {
+                return NotFound();
+            }
+
+            var token = info.AuthenticationTokens.Where(a => a.Name == "access_token").First().Value;
+            var channelId = _ytService.GetChannelId(token);
+            var subsList = _ytService.GetSubscriptions(channelId, token);
+            var recipeRatingDbContext = _context.Recipes.Include(r => r.Dish).Include(r => r.ProviderAccount).Include(r => r.Ratings).Include(r => r.User).Where(r => subsList.Contains(r.ProviderAccount.AccountId.ToLower()));
+            return View("Index", await recipeRatingDbContext.ToListAsync());
+        }
+
         // GET: Recipes/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -93,8 +109,6 @@ namespace RecipeRating.Web.Controllers
                         Name = recipe.AccountName,
                         ImageUrl = recipe.AccountImageUrl
                     };
-                    /*_context.ProviderAccounts.Add(newAccount);
-                    newRecipe.ProviderAccountId = newAccount.Id;*/
                 }
                 else
                 {
