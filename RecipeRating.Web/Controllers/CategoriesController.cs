@@ -54,7 +54,6 @@ namespace RecipeRating.Web.Controllers
 
             int pageSize = 10;
 
-            ViewBag.CurrentFilter = searchString;
             return View(await PaginatedList<Category>.CreateAsync(categories.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
 

@@ -7,10 +7,12 @@
 }
 
 <h1>Categories</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+@if (ViewContext.HttpContext.User.IsInRole("Admin") || ViewContext.HttpContext.User.IsInRole("Manager"))
+{
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+}
 
 <form asp-action="Index" method="get" class="mb-3">
     <div class="form-row">
@@ -28,19 +30,23 @@
 
 <table class="table">
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                <a asp-area="" asp-controller="Dishes" asp-action="Index" asp-route-categoryFilter="@item.Id">@Html.DisplayFor(modelItem => item.Name)</a>
-            </td>
-            <td>
-               <img src="@item.ImageUrl" alt="Image" width="100">
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary">Edit</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <a asp-area="" asp-controller="Dishes" asp-action="Index" asp-route-categoryFilter="@item.Id">@Html.DisplayFor(modelItem => item.Name)</a>
+                </td>
+                <td>
+                    <img src="@item.ImageUrl" alt="Image" width="100">
+                </td>
+                @if (ViewContext.HttpContext.User.IsInRole("Admin") || ViewContext.HttpContext.User.IsInRole("Manager"))
+                {
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary">Edit</a>
+                    </td>
+                }
+            </tr>
+        }
     </tbody>
 </table>
 

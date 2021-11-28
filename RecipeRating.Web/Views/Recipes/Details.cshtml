@@ -1,6 +1,8 @@
 ﻿@using System.Globalization
+@using Microsoft.AspNetCore.Identity
+@using RecipeRating.Model
 @model RecipeRating.Model.Recipe
-
+@inject SignInManager<AppUser> SignInManager
 @{
     ViewData["Title"] = "Details";
 }
@@ -24,25 +26,32 @@
         Added by user: <a href="#" target="_blank">@Model.User.FullName</a>
     </div>
 </div>
-<form asp-action="Rate" asp-route-recipeId="@Model.Id">
-    <div class="row">
-        <div class="col-12 mb-3">
-            <h5>Rate and leave a comment:</h5>
+@if (SignInManager.IsSignedIn(User))
+{
+    <form asp-action="Rate" asp-route-recipeId="@Model.Id">
+        <div class="row">
+            <div class="col-12 mb-3">
+                <h5>Rate and leave a comment:</h5>
+            </div>
+            <div class="col-lg-6 col-md-12">
+                <partial name="_Rating" model='@new RatingPartialModel("Simple","Complex","Simplicity")' />
+                <partial name="_Rating" model='@new RatingPartialModel("Cheap","Expensive","Price")' />
+                <partial name="_Rating" model='@new RatingPartialModel("Quick","Time consuming","Time")' />
+                <partial name="_Rating" model='@new RatingPartialModel("Bland","Tasty","Taste")' />
+            </div>
+            <div class="col-lg-6 col-md-12">
+                <textarea name="Comment" class="col-12 float-right" rows="5" placeholder="Leave a comment"></textarea>
+            </div>
+            <div class="col-12">
+                <input class="btn btn-outline-light float-right" type="submit" value="Send">
+            </div>
         </div>
-        <div class="col-lg-6 col-md-12">
-            <partial name="_Rating" model='@new RatingPartialModel("Simple","Complex","Simplicity")' />
-            <partial name="_Rating" model='@new RatingPartialModel("Cheap","Expensive","Price")' />
-            <partial name="_Rating" model='@new RatingPartialModel("Quick","Time consuming","Time")' />
-            <partial name="_Rating" model='@new RatingPartialModel("Bland","Tasty","Taste")' />
-        </div>
-        <div class="col-lg-6 col-md-12">
-            <textarea name="Comment" class="col-12 float-right" rows="5" placeholder="Leave a comment"></textarea>
-        </div>
-        <div class="col-12">
-            <input class="btn btn-outline-light float-right" type="submit" value="Send">
-        </div>
-    </div>
-</form>
+    </form>
+}
+else
+{
+    <a asp-area="Identity" asp-page="/Account/Register" class="btn btn-danger">Sign up to start rating</a>
+}
 <div class="row mt-3">
     <div class="col-12">
         <div class="col-12 mb-3">

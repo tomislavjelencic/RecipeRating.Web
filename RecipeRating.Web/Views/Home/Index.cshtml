@@ -1,4 +1,9 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Identity
+@using RecipeRating.Model
+
+@inject SignInManager<AppUser> SignInManager
+
+@{
     ViewData["Title"] = "Home";
 }
 <style>
@@ -47,7 +52,13 @@ hr{
 				<h1>You Taste</h1>
 				<h5>Watch, try, taste, rate!<br /><br /> Rate YouTube recipes.<br /> Find the recipe you are looking for.<br />Browse by categories, dishes and your YouTube subscriptions.</h5>
 				<hr />
-				<a asp-area="Identity" asp-page="/Account/Register" class="btn btn-danger">Sign up now</a>
+				@if (SignInManager.IsSignedIn(User)){
+					<a asp-area="" asp-controller="Categories" asp-action="Index" class="btn btn-danger">Start exploring</a>
+				}
+				else
+				{
+					<a asp-area="Identity" asp-page="/Account/Register" class="btn btn-danger">Sign up now</a>
+				}
 			</div>
 		</div>
 	</div>
