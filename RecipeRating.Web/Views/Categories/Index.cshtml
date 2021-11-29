@@ -10,7 +10,7 @@
 @if (ViewContext.HttpContext.User.IsInRole("Admin") || ViewContext.HttpContext.User.IsInRole("Manager"))
 {
     <p>
-        <a asp-action="Create">Create New</a>
+        <a class="btn btn-danger" asp-action="Create">Create New</a>
     </p>
 }
 

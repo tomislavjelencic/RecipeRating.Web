@@ -11,7 +11,7 @@
 @if (ViewContext.HttpContext.User.IsInRole("Admin") || ViewContext.HttpContext.User.IsInRole("Manager"))
 {
     <p>
-        <a asp-action="Create">Create New</a>
+        <a class="btn btn-danger" asp-action="Create">Create New</a>
     </p>
 }
 <form asp-action="Index" method="get" class="mb-3">
@@ -43,7 +43,7 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Name)
+                    <a asp-area="" asp-controller="Recipes" asp-action="Index" asp-route-dishFilter="@item.Id">@Html.DisplayFor(modelItem => item.Name)</a>
                 </td>
                 <td>
                     <img src="@item.ImageUrl" alt="Image" width="100">

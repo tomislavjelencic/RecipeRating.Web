@@ -1,4 +1,5 @@
-﻿@model IEnumerable<RecipeRating.Model.Recipe>
+﻿@using RecipeRating.Web.Helpers
+@model PaginatedList<RecipeRating.Model.Recipe>
 
 @{
     ViewData["Title"] = "Recipes";
@@ -13,6 +14,30 @@
         <a class="btn btn-danger" asp-action="Create">Create New</a>
     </p>
 }
+
+<form asp-action="Index" method="get" class="mb-3">
+    <div class="form-row">
+        <div class="col-3">
+            <input type="text" class="form-control" name="SearchString" value="@ViewData["CurrentFilter"]" placeholder="Search by name" />
+        </div>
+        <div class="col-3">
+            <select id="dishSelect" name="dishFilter" class="selectpicker form-control" data-live-search="true">
+                <option value="">All dishes</option>
+                @foreach (var item in ViewBag.DishId)
+                {
+                    <option value="@item.Value">@item.Text</option>
+                }
+            </select>
+        </div>
+        <div class="col-2">
+            <input type="submit" value="Apply filter" class="form-control btn btn-primary" />
+        </div>
+        <div class="col-2">
+            <a class="form-control btn btn-light" asp-action="Index">Undo filter</a>
+        </div>
+    </div>
+</form>
+
 <table class="table">
     <tbody>
         @foreach (var item in Model)
@@ -53,6 +78,26 @@
     </tbody>
 </table>
 
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+
+<a asp-action="Index"
+   asp-route-currentCategoryFilter="@ViewData["CurrentDishFilter"]"
+   asp-route-pageNumber="@(Model.PageIndex - 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @prevDisabled">
+    Previous
+</a>
+<a asp-action="Index"
+   asp-route-currentCategoryFilter="@ViewData["CurrentDishFilter"]"
+   asp-route-pageNumber="@(Model.PageIndex + 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @nextDisabled">
+    Next
+</a>
+
 @section Scripts{
 <script>
     $(document).ready(function(){
@@ -65,5 +110,8 @@
            readonly: true
        });
     });
+
+    $('#dishSelect').val(@ViewData["CurrentDishFilter"]);
+    $('.selectpicker').selectpicker('refresh');
 </script>
 }

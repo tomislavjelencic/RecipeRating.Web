@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RecipeRating.DAL;
 using RecipeRating.Model;
+using RecipeRating.Web.Helpers;
 using RecipeRating.Web.Models;
 using RecipeRating.Web.Services;
 
@@ -29,10 +30,51 @@ namespace RecipeRating.Web.Controllers
         }
 
         // GET: Recipes
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(RecipesFilterModel model)
         {
-            var recipeRatingDbContext = _context.Recipes.Include(r => r.Dish).Include(r => r.ProviderAccount).Include(r => r.Ratings).Include(r => r.User);
-            return View(await recipeRatingDbContext.ToListAsync());
+            /*ViewData["CurrentSort"] = model.sortOrder;
+            ViewData["SortTaste"] = model.sortTaste;
+            ViewData["SortPrice"] = model.sortPrice;
+            ViewData["SortComplex"] = model.sortComplex;
+            ViewData["SortTime"] = model.sortTime;
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";*/
+            if (model.searchString != null || model.dishFilter != null)
+            {
+                model.pageNumber = 1;
+            }
+            else
+            {
+                model.searchString = model.currentFilter;
+            }
+
+            ViewData["CurrentFilter"] = model.searchString;
+            ViewData["CurrentDishFilter"] = model.dishFilter;
+
+            var recipes = from r in _context.Recipes
+                             select r;
+            if (!String.IsNullOrEmpty(model.searchString))
+            {
+                recipes = recipes.Include(r => r.Dish).Where(s => s.Name.Contains(model.searchString));
+            }
+            if (model.dishFilter != null)
+            {
+                recipes = recipes.Include(r => r.Dish).Where(s => s.DishId == model.dishFilter.Value);
+            }
+
+            /*switch (sortOrder)
+            {
+                case "name_desc":
+                    categories = categories.OrderByDescending(s => s.Name);
+                    break;
+                default:
+                    categories = categories.OrderBy(s => s.Name);
+                    break;
+            }*/
+
+            int pageSize = 10;
+            ViewData["DishId"] = new SelectList(_context.Dishes, "Id", "Name", model.dishFilter);
+
+            return View(await PaginatedList<Recipe>.CreateAsync(recipes.Include(r => r.ProviderAccount).Include(r => r.Ratings).Include(r => r.User).AsNoTracking(), model.pageNumber ?? 1, pageSize));
         }
 
         // GET: Recipes/Subscriptions
