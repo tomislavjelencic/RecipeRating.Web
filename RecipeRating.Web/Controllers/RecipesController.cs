@@ -32,12 +32,6 @@ namespace RecipeRating.Web.Controllers
         // GET: Recipes
         public async Task<IActionResult> Index(RecipesFilterModel model)
         {
-            /*ViewData["CurrentSort"] = model.sortOrder;
-            ViewData["SortTaste"] = model.sortTaste;
-            ViewData["SortPrice"] = model.sortPrice;
-            ViewData["SortComplex"] = model.sortComplex;
-            ViewData["SortTime"] = model.sortTime;
-            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";*/
             if (model.searchString != null || model.dishFilter != null)
             {
                 model.pageNumber = 1;
@@ -49,9 +43,25 @@ namespace RecipeRating.Web.Controllers
 
             ViewData["CurrentFilter"] = model.searchString;
             ViewData["CurrentDishFilter"] = model.dishFilter;
+            IQueryable<Recipe> recipes;
+            if (model.subFilter == "true")
+            {
+                var info = await _signInManager.GetExternalLoginInfoAsync();
+                if (info == null)
+                {
+                    return NotFound();
+                }
 
-            var recipes = from r in _context.Recipes
-                             select r;
+                var token = info.AuthenticationTokens.Where(a => a.Name == "access_token").First().Value;
+                var channelId = _ytService.GetChannelId(token);
+                var subsList = _ytService.GetSubscriptions(channelId, token);
+                recipes = _context.Recipes.Include(r => r.Dish).Include(r => r.ProviderAccount).Include(r => r.Ratings).Include(r => r.User).Where(r => subsList.Contains(r.ProviderAccount.AccountId.ToLower()));
+            }
+            else
+            {
+                recipes = from r in _context.Recipes
+                              select r;
+            }
             if (!String.IsNullOrEmpty(model.searchString))
             {
                 recipes = recipes.Include(r => r.Dish).Where(s => s.Name.Contains(model.searchString));
@@ -60,16 +70,6 @@ namespace RecipeRating.Web.Controllers
             {
                 recipes = recipes.Include(r => r.Dish).Where(s => s.DishId == model.dishFilter.Value);
             }
-
-            /*switch (sortOrder)
-            {
-                case "name_desc":
-                    categories = categories.OrderByDescending(s => s.Name);
-                    break;
-                default:
-                    categories = categories.OrderBy(s => s.Name);
-                    break;
-            }*/
 
             int pageSize = 10;
             ViewData["DishId"] = new SelectList(_context.Dishes, "Id", "Name", model.dishFilter);

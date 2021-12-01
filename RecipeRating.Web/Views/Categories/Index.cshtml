@@ -28,27 +28,25 @@
     </div>
 </form>
 
-<table class="table">
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    <a asp-area="" asp-controller="Dishes" asp-action="Index" asp-route-categoryFilter="@item.Id">@Html.DisplayFor(modelItem => item.Name)</a>
-                </td>
-                <td>
-                    <img src="@item.ImageUrl" alt="Image" width="100">
-                </td>
-                @if (ViewContext.HttpContext.User.IsInRole("Admin") || ViewContext.HttpContext.User.IsInRole("Manager"))
-                {
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary">Edit</a>
-                    </td>
-                }
-            </tr>
-        }
-    </tbody>
-</table>
+
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class="col-12 col-sm-8 col-md-6 col-lg-4 mb-3">
+            <div class="card">
+                <div class="embed-responsive embed-responsive-16by9">
+                    <img alt="@item.Name" class="card-img-top embed-responsive-item" src="@item.ImageUrl" />
+                </div>
+                @*<img class="card-img-top " src="@item.ImageUrl" alt="@item.Name">*@
+                <div class="card-body">
+                    <a asp-area="" asp-controller="Dishes" asp-action="Index" asp-route-categoryFilter="@item.Id"><h4 class="card-title">@item.Name</h4></a>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary">Edit</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
 
 @{
     var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";

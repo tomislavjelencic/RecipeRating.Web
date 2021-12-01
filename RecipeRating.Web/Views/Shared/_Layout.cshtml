@@ -39,7 +39,7 @@
                         @if (SignInManager.GetExternalLoginInfoAsync().Result != null)
                         {
                             <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Recipes" asp-action="Subscriptions">My subscriptions</a>
+                                <a class="nav-link" asp-area="" asp-controller="Recipes" asp-action="Index" asp-route-subFilter="true">My subscriptions</a>
                             </li>
                         }
                         @if (ViewContext.HttpContext.User.IsInRole("Admin"))

@@ -52,7 +52,7 @@ namespace RecipeRating.Web.Controllers
                     break;
             }
 
-            int pageSize = 10;
+            int pageSize = 12;
 
             return View(await PaginatedList<Category>.CreateAsync(categories.AsNoTracking(), pageNumber ?? 1, pageSize));
         }

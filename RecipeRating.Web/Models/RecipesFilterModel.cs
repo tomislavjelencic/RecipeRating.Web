@@ -12,6 +12,7 @@
         public string currentFilter { get; set; }
         public string searchString { get; set; }*/
         public string currentFilter { get; set; }
+        public string subFilter { get; set; }
         public string searchString { get; set; }
         public int? pageNumber { get; set; }
     }

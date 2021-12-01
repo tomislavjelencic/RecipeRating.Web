@@ -8,7 +8,7 @@
 <link rel="stylesheet" href="/css/rating/bars-movie-readonly.css" />
 
 <h1>Recipes</h1>
-@if (ViewContext.HttpContext.User.IsInRole("Admin") ||ViewContext.HttpContext.User.IsInRole("Manager"))
+@if (ViewContext.HttpContext.User.IsInRole("Admin") || ViewContext.HttpContext.User.IsInRole("Manager"))
 {
     <p>
         <a class="btn btn-danger" asp-action="Create">Create New</a>
@@ -38,45 +38,40 @@
     </div>
 </form>
 
-<table class="table">
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    <a asp-area="" asp-controller="Recipes" asp-action="Details" asp-route-id="@item.Id">@item.Name</a>
-                </td>
-                <td>
-                    <img src="@item.ThumbnailUrl" alt="Image" width="100">
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ProviderAccount.Name)
-                </td>
-                <td>
-                    @if (item.Complexity == null)
-                    {
-                        <p>No ratings yet</p>
-                    }
-                    else
-                    {
-                        <div class="col-md-12">
-                            <partial name="_RatingReadonly" model='@new RatingReadonlyPartialModel("Complex", "complex.svg", @item.Complexity)' />
-                            <partial name="_RatingReadonly" model='@new RatingReadonlyPartialModel("Time intensive", "time.svg", @item.Time)' />
-                            <partial name="_RatingReadonly" model='@new RatingReadonlyPartialModel("Expensive", "price.svg", @item.Price)' />
-                            <partial name="_RatingReadonly" model='@new RatingReadonlyPartialModel("Tasty", "tasty.svg", @item.Taste)' />
-                        </div>
-                    }
-                </td>
-                @if (ViewContext.HttpContext.User.IsInRole("Admin") || ViewContext.HttpContext.User.IsInRole("Manager"))
-                {
-                    <td>
-                        <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                    </td>
-                }
-            </tr>
-        }
-    </tbody>
-</table>
+@*<table class="table">
+    <tbody>*@
+@foreach (var item in Model)
+{
+    <div class="card flex-row mb-3">
+        <img class="card-img-left example-card-img-responsive" src="@item.ThumbnailUrl" alt="Image" />
+        <div class="card-body">
+            <h4 class="card-title h5 h4-sm"><a class="streched-link" asp-area="" asp-controller="Recipes" asp-action="Details" asp-route-id="@item.Id">@item.Name</a></h4>
+            <p class="card-text">@Html.DisplayFor(modelItem => item.ProviderAccount.Name)</p>
+            @if (item.Complexity == null)
+            {
+                <p class="float-right">No ratings yet</p>
+            }
+            else
+            {
+                <div class=" float-right">
+                    <partial name="_RatingReadonly" model='@new RatingReadonlyPartialModel("Complex", "complex.svg", @item.Complexity)' />
+                    <partial name="_RatingReadonly" model='@new RatingReadonlyPartialModel("Time intensive", "time.svg", @item.Time)' />
+                    <partial name="_RatingReadonly" model='@new RatingReadonlyPartialModel("Expensive", "price.svg", @item.Price)' />
+                    <partial name="_RatingReadonly" model='@new RatingReadonlyPartialModel("Tasty", "tasty.svg", @item.Taste)' />
+                </div>
+            }
+            @if (ViewContext.HttpContext.User.IsInRole("Admin") || ViewContext.HttpContext.User.IsInRole("Manager"))
+            {
+                <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+            }
+        </div>
+    </div>
+
+
+
+}
+@*    </tbody>
+    </table>*@
 
 @{
     var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";

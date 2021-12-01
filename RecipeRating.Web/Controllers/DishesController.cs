@@ -47,10 +47,10 @@ namespace RecipeRating.Web.Controllers
                 dishes = dishes.Include(d => d.Category).Where(s => s.CategoryId == filter.categoryFilter.Value);
             }
 
-            int pageSize = 10;
+            int pageSize = 12;
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", filter.categoryFilter);
             //ViewBag.CurrentFilter = filter.searchString;
-            return View(await PaginatedList<Dish>.CreateAsync(dishes.AsNoTracking(), filter.pageNumber ?? 1, pageSize));
+            return View(await PaginatedList<Dish>.CreateAsync(dishes.Include(d => d.Category).AsNoTracking(), filter.pageNumber ?? 1, pageSize));
 
             /*var recipeRatingDbContext = _context.Dishes.Include(d => d.Category);
             return View(await recipeRatingDbContext.ToListAsync());*/
