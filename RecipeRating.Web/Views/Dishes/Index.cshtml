@@ -69,7 +69,10 @@
                 <div class="card-body">
                     <a asp-area="" asp-controller="Recipes" asp-action="Index" asp-route-dishFilter="@item.Id"><h4 class="card-title">@item.Name</h4></a>
                     <h6 class="card-subtitle mb-2 text-muted">@item.Category.Name</h6>
-                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary">Edit</a>
+                    @if (ViewContext.HttpContext.User.IsInRole("Admin") || ViewContext.HttpContext.User.IsInRole("Manager"))
+                    {
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary">Edit</a>
+                    }
                 </div>
             </div>
         </div>

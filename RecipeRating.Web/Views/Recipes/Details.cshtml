@@ -2,7 +2,9 @@
 @using Microsoft.AspNetCore.Identity
 @using RecipeRating.Model
 @model RecipeRating.Model.Recipe
+@inject UserManager<AppUser> UserManager
 @inject SignInManager<AppUser> SignInManager
+
 @{
     ViewData["Title"] = "Details";
 }
@@ -28,7 +30,9 @@
 </div>
 @if (SignInManager.IsSignedIn(User))
 {
-    <form asp-action="Rate" asp-route-recipeId="@Model.Id">
+    @if(Model.Ratings.FirstOrDefault(r => r.UserId == UserManager.GetUserAsync(User).Result.Id) == null)
+    {
+        <form asp-action="Rate" asp-route-recipeId="@Model.Id">
         <div class="row">
             <div class="col-12 mb-3">
                 <h5>Rate and leave a comment:</h5>
@@ -46,7 +50,12 @@
                 <input class="btn btn-outline-light float-right" type="submit" value="Send">
             </div>
         </div>
-    </form>
+        </form>
+    }
+    else
+    {
+        <h3>Already rated</h3>
+    }
 }
 else
 {
