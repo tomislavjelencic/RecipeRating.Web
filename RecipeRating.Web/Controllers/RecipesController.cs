@@ -160,9 +160,6 @@ namespace RecipeRating.Web.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            /*ViewData["DishId"] = new SelectList(_context.Dishes, "Id", "ImageUrl", recipe.DishId);*/
-            /*ViewData["ProviderAccountId"] = new SelectList(_context.Set<ProviderAccount>(), "Id", "Id", recipe.ProviderAccountId);*/
-            /*ViewData["UserId"] = new SelectList(_context.AppUsers, "Id", "Id", recipe.UserId);*/
             return View(recipe);
         }
 
@@ -170,7 +167,6 @@ namespace RecipeRating.Web.Controllers
         public async Task<ActionResult> CreateAjax(string keyword)
         {
             var info = await _signInManager.GetExternalLoginInfoAsync();
-            //var token = info.AuthenticationTokens.Where(a => a.Name == "access_token").First().Value;
             var model = _ytService.GetSearchResults(keyword);
             return Ok(model);
         }
@@ -179,7 +175,6 @@ namespace RecipeRating.Web.Controllers
         public async Task<ActionResult> GetVideoAjax(string id)
         {
             var info = await _signInManager.GetExternalLoginInfoAsync();
-            //var token = info.AuthenticationTokens.Where(a => a.Name == "access_token").First().Value;
             var model = _ytService.GetVideo(id);
             
             var dto = new VideoAutocompleteModel

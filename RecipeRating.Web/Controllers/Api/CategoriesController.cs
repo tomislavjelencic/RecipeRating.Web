@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RecipeRating.DAL;
 using RecipeRating.Model;
+using RecipeRating.Model.Interfaces;
 
 namespace RecipeRating.Web.Controllers.Api
 {
@@ -14,35 +15,35 @@ namespace RecipeRating.Web.Controllers.Api
     [ApiController]
     public class CategoriesController : ControllerBase
     {
-        private readonly RecipeRatingDbContext _context;
+        private readonly IRepositoryWrapper _repository;
 
-        public CategoriesController(RecipeRatingDbContext context)
+        public CategoriesController(IRepositoryWrapper repository)
         {
-            _context = context;
+            _repository = repository;
         }
 
         // GET: api/Categories
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
+        public IActionResult GetCategories()
         {
-            return await _context.Categories.ToListAsync();
+            return Ok(_repository.Category.GetAll());
         }
 
         // GET: api/Categories/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Category>> GetCategory(int id)
+        public async Task<IActionResult> GetCategoryById(int id)
         {
-            var category = await _context.Categories.FindAsync(id);
+            var category = await _repository.Category.GetByIdAsync(id);
 
             if (category == null)
             {
                 return NotFound();
             }
 
-            return category;
+            return Ok(category);
         }
 
-        // PUT: api/Categories/5
+        /*// PUT: api/Categories/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
@@ -105,6 +106,6 @@ namespace RecipeRating.Web.Controllers.Api
         private bool CategoryExists(int id)
         {
             return _context.Categories.Any(e => e.Id == id);
-        }
+        }*/
     }
 }

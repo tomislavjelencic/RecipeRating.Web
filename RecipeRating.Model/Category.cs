@@ -1,11 +1,12 @@
-﻿using System;
+﻿using RecipeRating.Model.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace RecipeRating.Model
 {
-    public class Category
+    public class Category : IEntity
     {
         [Key]
         public int Id { get; set; }

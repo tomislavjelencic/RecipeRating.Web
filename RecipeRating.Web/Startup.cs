@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -10,9 +11,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 using RecipeRating.DAL;
+using RecipeRating.DAL.Repositories;
 using RecipeRating.Model;
+using RecipeRating.Model.Interfaces;
 using RecipeRating.Web.Services;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace RecipeRating.Web
 {
@@ -47,7 +52,7 @@ namespace RecipeRating.Web
             {
                 // Cookie settings
                 options.Cookie.HttpOnly = true;
-                options.ExpireTimeSpan = TimeSpan.FromDays(10);
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(10);
 
                 options.LoginPath = "/Login";
                 options.AccessDeniedPath = "/AccessDenied";
@@ -73,6 +78,18 @@ namespace RecipeRating.Web
                 .AddEntityFrameworkStores<RecipeRatingDbContext>();
 
             services.AddScoped<IYtHttpService, YtHttpService>();
+            services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
+
+            services.AddSwaggerGen(c =>
+            {
+                c.DocInclusionPredicate((docName, apiDesc) =>
+                {
+                    if (!apiDesc.TryGetMethodInfo(out MethodInfo methodInfo)) return false;
+
+                    return methodInfo.DeclaringType.GetCustomAttributes<Microsoft.AspNetCore.Mvc.ApiControllerAttribute>(true).Any();
+                });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Recipe Rating Web", Version = "v1" });
+            });
 
             services.AddControllersWithViews();
         }
@@ -83,6 +100,11 @@ namespace RecipeRating.Web
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseSwagger();
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("v1/swagger.json", "Recipe Rating Web v1");
+                });
             }
             else
             {
