@@ -80,6 +80,8 @@ namespace RecipeRating.Web
             services.AddScoped<IYtHttpService, YtHttpService>();
             services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
 
+            services.AddAutoMapper(typeof(Startup));
+
             services.AddSwaggerGen(c =>
             {
                 c.DocInclusionPredicate((docName, apiDesc) =>
