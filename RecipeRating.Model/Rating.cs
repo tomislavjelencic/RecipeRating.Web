@@ -17,6 +17,7 @@ namespace RecipeRating.Model
         public int Time { get; set; }
         [Required]
         public int Taste { get; set; }
+        [MaxLength(500)]
         public string Comment { get; set; }
         public string UserId { get; set; }
         public AppUser User { get; set; }

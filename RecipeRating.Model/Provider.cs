@@ -10,6 +10,7 @@ namespace RecipeRating.Model
         [Key]
         public int Id { get; set; }
         [Required]
+        [MaxLength(150)]
         public string Name { get; set; }
         public string LogoUrl { get; set; }
         public virtual ICollection<ProviderAccount> ProviderAccounts { get; set; }
